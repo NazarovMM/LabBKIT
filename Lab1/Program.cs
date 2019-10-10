@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Lab1
+namespace Лаб1
 {
     class Program
     {
@@ -41,21 +41,21 @@ namespace Lab1
             }
             else
             {
-                Console.WriteLine("Введите значение А = ");
+                Console.Write("Введите значение А = ");
                 while (!double.TryParse(Console.ReadLine(), out A))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ошибка ввода!!! Введите значение А = ");
                     Console.ResetColor();
                 }
-                Console.WriteLine("Введите значение B = ");
+                Console.Write("Введите значение B = ");
                 while (!double.TryParse(Console.ReadLine(), out B))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("Ошибка ввода!!! Введите значение B = ");
                     Console.ResetColor();
                 }
-                Console.WriteLine("Введите значение C = ");
+                Console.Write("Введите значение C = ");
                 while (!double.TryParse(Console.ReadLine(), out C))
                 {
                     Console.ForegroundColor = ConsoleColor.Red;
@@ -72,22 +72,56 @@ namespace Lab1
                 {
                     d1 = (-B + Math.Sqrt(d)) / (2 * A);
                     d2 = (-B - Math.Sqrt(d)) / (2 * A);
-                    x1 = Math.Sqrt(d1);
-                    x2 = -Math.Sqrt(d1);
-                    x3 = Math.Sqrt(d2);
-                    x4 = -Math.Sqrt(d2);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"x1={x1} x2={x2} x3={x3} x4={x4}");
-                    Console.ResetColor();
+                    if (d1 < 0 && d2 < 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Нет корней");
+                        Console.ResetColor();
+                    }
+                    if ((d1 >= 0 && d2 >= 0))
+                    {
+                        x1 = Math.Sqrt(d1);
+                        x2 = -Math.Sqrt(d1);
+                        x3 = Math.Sqrt(d2);
+                        x4 = -Math.Sqrt(d2);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"x1={x1} x2={x2} x3={x3} x4={x4}");
+                        Console.ResetColor();
+                    }
+                    if (d1 >= 0 && d2 < 0)
+                    {
+                        x1 = Math.Sqrt(d1);
+                        x2 = -Math.Sqrt(d1);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"x1={x1} x2={x2}");
+                        Console.ResetColor();
+                    }
+                    if (d1 < 0 && d2 >= 0)
+                    {
+                        x3 = Math.Sqrt(d2);
+                        x4 = -Math.Sqrt(d2);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"x1={x3} x2={x4}");
+                        Console.ResetColor();
+                    }
                 }
                 if (d == 0)
                 {
                     d1 = -B / (2 * A);
-                    x1 = Math.Sqrt(d1);
-                    x2 = -Math.Sqrt(d1);
-                    Console.ForegroundColor = ConsoleColor.Green;
-                    Console.WriteLine($"x1={x1} x2={x2}");
-                    Console.ResetColor();
+                    if (d1 < 0)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Red;
+                        Console.WriteLine("Нет корней");
+                        Console.ResetColor();
+                    }
+                    else
+                    {
+                        x1 = Math.Sqrt(d1);
+                        x2 = -Math.Sqrt(d1);
+                        Console.ForegroundColor = ConsoleColor.Green;
+                        Console.WriteLine($"x1={x1} x2={x2}");
+                        Console.ResetColor();
+                    }
                 }
                 if (d < 0)
                 {
@@ -106,24 +140,33 @@ namespace Lab1
             {
                 x1 = 0;
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"x={x1}");
+                Console.WriteLine($"x1=x2={x1}");
                 Console.ResetColor();
             }
             if (A == 0 && C == 0 && B != 0)
             {
                 x1 = 0;
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"x={x1}");
+                Console.WriteLine($"x1=x2={x1}");
                 Console.ResetColor();
             }
             if (A == 0 && B != 0 && C != 0)
             {
                 d1 = -C / B;
-                x1 = Math.Sqrt(d1);
-                x2 = -Math.Sqrt(d1);
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"x1={x1} x2={x2}");
-                Console.ResetColor();
+                if (d1 < 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("Нет корней");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    x1 = Math.Sqrt(d1);
+                    x2 = -Math.Sqrt(d1);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"x1={x1} x2={x2}");
+                    Console.ResetColor();
+                }
             }
             if (B == 0 && A != 0 && C != 0)
             {
@@ -148,12 +191,29 @@ namespace Lab1
             {
                 d1 = 0;
                 d2 = -B / A;
-                x1 = Math.Sqrt(d1);
-                x2 = -Math.Sqrt(d1);
-                x3 = Math.Sqrt(d2);
-                x4 = -Math.Sqrt(d2);
+                if (d2 < 0)
+                {
+                    x1 = Math.Sqrt(d1);
+                    x2 = -Math.Sqrt(d1);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"x1={x1} x2={x2}");
+                    Console.ResetColor();
+                }
+                else
+                {
+                    x1 = Math.Sqrt(d1);
+                    x2 = -Math.Sqrt(d1);
+                    x3 = Math.Sqrt(d2);
+                    x4 = -Math.Sqrt(d2);
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine($"x1={x1} x2={x2} x3={x3} x4={x4}");
+                    Console.ResetColor();
+                }
+            }
+            if (C == 0 && A == 0 && B == 0)
+            {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine($"x1={x1} x2={x2} x3={x3} x4={x4}");
+                Console.WriteLine("Любое число является корнем");
                 Console.ResetColor();
             }
             Console.ReadKey();
