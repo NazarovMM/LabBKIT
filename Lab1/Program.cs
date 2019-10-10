@@ -63,7 +63,7 @@ namespace Lab1
                     Console.ResetColor();
                 }
             }
-            Console.Clear();
+            //Console.Clear();
             double d, d1, d2, x1, x2, x3, x4;
             if (A != 0 && B != 0 && C != 0)
             {
