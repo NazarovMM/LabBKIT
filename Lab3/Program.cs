@@ -12,9 +12,9 @@ namespace Lab3
         static void Main(string[] args)
         {
             Console.Title = "Назаров Максим Михайлович Группа ИУ5-33Б";
-            Rectangle rect = new Rectangle(6, 5);
+            Rectangle rect = new Rectangle(8, 6);
             Square sq = new Square(8);
-            Circle cir = new Circle(11);
+            Circle cir = new Circle(8);
 
             Console.ForegroundColor = ConsoleColor.DarkRed;
             Console.WriteLine("\nArrayList");
