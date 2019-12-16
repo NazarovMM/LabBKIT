@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using System.Diagnostics;
+using Lab5;
 
 namespace Lab4
 {
@@ -85,7 +86,7 @@ namespace Lab4
                 this.listBox1.EndUpdate();
             }
             else
-            { 
+            {
                 MessageBox.Show("Необходимо выбрать файл и ввести слово для поиска");
             }
 
@@ -100,5 +101,105 @@ namespace Lab4
         {
 
         }
+        public static List<ParallelSearchResult> ArrayThreadTask(object paramObj)
+        {
+            ParallelSearchThreadParam param = (ParallelSearchThreadParam)paramObj;
+            string wordUpper = param.wordPattern.Trim().ToUpper();
+            List<ParallelSearchResult> Result = new List<ParallelSearchResult>();
+            foreach (string str in param.tempList)
+            {
+                int dist = Levensthtain.Distance(str.ToUpper(), wordUpper);
+                if (dist <= param.maxDist)
+                {
+                    ParallelSearchResult temp = new ParallelSearchResult()
+                    {
+                        word = str,
+                        dist = dist,
+                        ThreadNum = param.ThreadNum
+                    };
+                    Result.Add(temp);
+                }
+            }
+            return Result;
+        }
+
+        private void button3_Click(object sender, EventArgs e)
+
+        {
+            string word = this.textBox4.Text.Trim();
+            this.listBox1.BeginUpdate();
+            this.listBox1.Items.Clear();
+            if (!string.IsNullOrWhiteSpace(word) && list.Count > 0)
+            {
+                int maxDist;
+                if (!int.TryParse(this.textBox7.Text.Trim(), out maxDist))
+                {
+                    MessageBox.Show("Необходимо указать максимальное расстояние");
+                    return;
+                }
+                if (maxDist < 1 || maxDist > 5)
+                {
+                    MessageBox.Show("Максимальное расстояние должно быть в диапазоне от 1 до 5");
+                    return;
+                }
+                int ThreadCount;
+                if (!int.TryParse(this.textBox8.Text.Trim(), out ThreadCount))
+                {
+                    MessageBox.Show("Необходимо указать количество потоков");
+                    return;
+                }
+                Stopwatch timer = new Stopwatch();
+                timer.Start();
+                List<ParallelSearchResult> Result = new List<ParallelSearchResult>();
+                List<MinMax> arrayDivList = SubArrays.DivideSubArrays(0, list.Count, ThreadCount);
+                int count = arrayDivList.Count;
+                Task<List<ParallelSearchResult>>[] tasks = new Task<List<ParallelSearchResult>>[count];
+                for (int i = 0; i < count; i++)
+                {
+                    List<string> tempTaskList = list.GetRange(arrayDivList[i].Min, arrayDivList[i].Max - arrayDivList[i].Min);
+                    tasks[i] = new Task<List<ParallelSearchResult>>(
+                        ArrayThreadTask,
+                        new ParallelSearchThreadParam()
+                        {
+                            tempList = tempTaskList,
+                            maxDist = maxDist,
+                            ThreadNum = i,
+                            wordPattern = word
+                        });
+                    tasks[i].Start();
+                }
+                Task.WaitAll(tasks);
+                timer.Stop();
+                for (int i = 0; i < count; i++)
+                {
+                    Result.AddRange(tasks[i].Result);
+                }
+                timer.Stop();
+                this.textBox5.Text = timer.Elapsed.ToString();
+                this.textBox6.Text = count.ToString();
+                foreach (var x in Result)
+                {
+                    string temp = x.word + "(расстояние=" + x.dist.ToString() + " поток=" + x.ThreadNum.ToString() + ")";
+                    this.listBox1.Items.Add(temp);
+                }
+                this.listBox1.EndUpdate();
+            }
+            else
+            {
+                MessageBox.Show("Необходимо выбрать файл и ввести слово для поиска");
+            }
+        }
+
+        private void label7_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void textBox7_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
+
+
